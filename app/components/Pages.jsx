@@ -10,89 +10,28 @@ import {
 
 import global from '../stylesheets/global';
 
-const Pages = () => {
-  const data = [
-    {
-      id: 1,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-    {
-      id: 2,
-      title: 'Test',
-      text: 'Testing of the testing of the test test test test lorem ipsum dolor sit amet.',
-    },
-  ];
+const Pages = ({pages}) => {
+  const renderPage = ({item}) => {
+    return (
+      <TouchableOpacity style={styles.pages__page} activeOpacity={0.7}>
+        <Text style={styles.pages__item}>{item.title}</Text>
+        <Text style={styles.pages__item}>{item.text}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.pages}>
-      <ScrollView
+      <FlatList
         style={styles.pages__list}
-        contentContainerStyle={styles.pages__listContainer}>
+        contentContainerStyle={styles.pages__listContainer}
+        data={pages}
+        keyExtractor={item => item.id}
+        renderItem={renderPage}>
         <Text style={styles.pages__heading}>Recent Pages</Text>
-        {data.map(page => (
-          <TouchableOpacity style={styles.pages__page} activeOpacity={0.7}>
-            <Text style={styles.pages__item}>{page.title}</Text>
-            <Text style={styles.pages__item}>{page.text}</Text>
-          </TouchableOpacity>
-        ))}
+
         <Text style={styles.pages__heading}>Testers</Text>
-      </ScrollView>
+      </FlatList>
     </View>
   );
 };
