@@ -7,7 +7,6 @@ import global from '../stylesheets/global';
 const EditorNavbar = ({navigation, save}) => {
   const back = () => {
     navigation.navigate('Home');
-    save();
   };
 
   return (
@@ -32,7 +31,8 @@ const EditorNavbar = ({navigation, save}) => {
         </TouchableOpacity>
         <TouchableOpacity
           accessibilityLabel="Redo"
-          style={styles.navbar__backBtn}>
+          style={styles.navbar__backBtn}
+          onPress={save}>
           <Icon name="check" size={24} />
         </TouchableOpacity>
       </View>

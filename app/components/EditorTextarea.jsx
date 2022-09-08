@@ -12,12 +12,10 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import global from '../stylesheets/global';
 
-const EditorTextarea = () => {
-  const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
-
-  const textInput = (text, setter) => {
-    setter(text);
+const EditorTextarea = ({getValue, updateState}) => {
+  const textInput = (text, isMainText) => {
+    updateState(text, isMainText);
+    return text;
   };
 
   return (
@@ -27,15 +25,15 @@ const EditorTextarea = () => {
           placeholder="Page Title"
           selectionColor={global.colors.primary[70050]}
           style={styles.editor__title}
-          value={title}
-          onChangeText={text => textInput(text, setTitle)}
+          value={getValue(false)}
+          onChangeText={text => textInput(text, false)}
         />
 
         <TextInput
           style={styles.editor__main}
           selectionColor={global.colors.primary[70050]}
-          value={text}
-          onChangeText={text => textInput(text, setText)}
+          value={getValue(true)}
+          onChangeText={text => textInput(text, true)}
           multiline
         />
       </ScrollView>
