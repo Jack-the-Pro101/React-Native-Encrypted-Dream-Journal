@@ -34,10 +34,13 @@ const Pages = ({pages, navigation}) => {
             }}>
             <Text style={styles.pages__itemTitle}>{item.title}</Text>
             <Text style={styles.pages__itemPreview}>
-              {item.text.slice(0, 42) + (item.text.length > 42 ? '...' : '')}
+              {item.text.slice(0, 42).replace(/\n/g, ' ') +
+                (item.text.length > 42 ? '...' : '')}
             </Text>
             <View style={styles.pages__itemStats}>
-              <Text style={styles.pages__itemStat}>{item.wordCount} words</Text>
+              <Text style={styles.pages__itemStat}>
+                {item.wordCount + (item.wordCount === 1 ? ' word' : ' words')}
+              </Text>
               <Text style={styles.pages__itemStat}>
                 {date.getFullYear() === new Date().getFullYear()
                   ? format(date, "MMM'.' d")
