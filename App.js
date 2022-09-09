@@ -24,8 +24,8 @@ const HomeScreen = ({navigation}) => {
   return <Home navigation={navigation} styles={styles} />;
 };
 
-const EditorScreen = ({navigation}) => {
-  return <Editor navigation={navigation} styles={styles} />;
+const EditorScreen = ({navigation, route}) => {
+  return <Editor navigation={navigation} route={route} styles={styles} />;
 };
 
 const Stacks = () => {

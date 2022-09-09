@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, ScrollView} from 'react-native';
+import {SafeAreaView} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -9,11 +9,17 @@ import Navbar from '../components/Navbar';
 
 const Home = ({navigation, styles}) => {
   const [pages, setPages] = useState([]);
-  // const [recentPages, setRecentPages] = useState([]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
-      setPages(AsyncStorage.multiGet(await AsyncStorage.getAllKeys()));
+      const savedPages = await AsyncStorage.multiGet(
+        await AsyncStorage.getAllKeys(),
+      );
+      setPages(
+        savedPages.sort(
+          (a, b) => JSON.parse(b[1]).lastOpened - JSON.parse(a[1]).lastOpened,
+        ),
+      );
     });
 
     return unsubscribe;
@@ -23,9 +29,7 @@ const Home = ({navigation, styles}) => {
     <SafeAreaView style={styles.root}>
       <Header />
 
-      <ScrollView>
-        <Pages pages={pages} />
-      </ScrollView>
+      <Pages pages={pages} navigation={navigation} />
 
       <Navbar navigation={navigation} />
     </SafeAreaView>

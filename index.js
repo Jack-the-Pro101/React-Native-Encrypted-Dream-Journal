@@ -7,4 +7,10 @@ import App from './App';
 import {name as appName} from './app.json';
 import 'react-native-get-random-values';
 
-AppRegistry.registerComponent(appName, () => App);
+(async () => {
+  if (__DEV__) {
+    await import('react-native-console-time-polyfill');
+  }
+
+  AppRegistry.registerComponent(appName, () => App);
+})();
