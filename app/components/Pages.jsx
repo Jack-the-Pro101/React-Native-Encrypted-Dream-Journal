@@ -1,18 +1,115 @@
-import React, {useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {
   View,
   Text,
-  ScrollView,
   FlatList,
   TouchableOpacity,
+  Animated,
+  Dimensions,
   StyleSheet,
 } from 'react-native';
+
+import Icon from 'react-native-vector-icons/dist/Entypo';
 
 import {format} from 'date-fns';
 
 import global from '../stylesheets/global';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Pages = ({pages, navigation}) => {
+const PageActionMenu = ({isActive, activeId, deactivate, setPages, pages}) => {
+  const slideAnim = useRef(
+    new Animated.ValueXY({x: 0, y: Dimensions.get('screen').height / 4}),
+  ).current;
+
+  const fadeInAnim = useRef(new Animated.Value(0)).current;
+
+  const showTransition = useRef(
+    new Animated.ValueXY({x: 0, y: Dimensions.get('screen').height}),
+  ).current;
+
+  const slideAnimation = Animated.timing(slideAnim, {
+    toValue: 0,
+    duration: 150,
+    useNativeDriver: true,
+  });
+
+  const fadeInAnimation = Animated.timing(fadeInAnim, {
+    toValue: 0.5,
+    duration: 150,
+    useNativeDriver: true,
+  });
+
+  const showTransitionAnimation = Animated.timing(showTransition, {
+    toValue: 0,
+    duration: 1,
+    useNativeDriver: true,
+  });
+
+  if (isActive) {
+    slideAnimation.start();
+    fadeInAnimation.start();
+    showTransitionAnimation.start();
+  } else {
+    slideAnimation.reset();
+    fadeInAnimation.reset();
+    showTransitionAnimation.reset();
+  }
+
+  const deletePage = async () => {
+    setPages(pages.filter(page => page[0] !== activeId));
+    deactivate();
+    await AsyncStorage.removeItem(activeId);
+  };
+
+  return (
+    <>
+      <Animated.View
+        style={{
+          ...styles.pages__actionOverlay,
+          transform: [{translateY: showTransition.y}],
+          opacity: fadeInAnim,
+        }}>
+        <TouchableOpacity
+          style={styles.pages__actionOverlayClick}
+          onPress={() => deactivate()}
+        />
+      </Animated.View>
+      <Animated.View
+        style={{
+          ...styles.pages__actionMenu,
+          transform: [{translateY: slideAnim.y}],
+        }}>
+        <TouchableOpacity style={styles.pages__actionItem}>
+          <Icon name="add-to-list" size={20} />
+          <Text>Add to Folder</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.pages__actionItem}>
+          <Icon name="pin" size={20} />
+          <Text>Pin</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.pages__actionItem} onPress={deletePage}>
+          <Icon name="trash" size={20} />
+          <Text>Delete</Text>
+        </TouchableOpacity>
+      </Animated.View>
+    </>
+  );
+};
+
+const Pages = ({pages, navigation, setPages}) => {
+  const [currentActionMenuId, setCurrentActionMenuId] = useState('');
+  const [actionMenuShown, setActionMenuShown] = useState(false);
+
+  const setCurrentActionMenu = id => {
+    setCurrentActionMenuId(id);
+    setActionMenuShown(true);
+  };
+
+  const deactivateActionMenu = () => {
+    setCurrentActionMenuId(null);
+    setActionMenuShown(false);
+  };
+
   const renderPage = ({item, index}) => {
     try {
       const id = item[0];
@@ -47,6 +144,15 @@ const Pages = ({pages, navigation}) => {
                   : format(date, "MMM'.' d y")}
               </Text>
             </View>
+            <TouchableOpacity
+              style={styles.pages__contextBtn}
+              onPress={() => setCurrentActionMenu(id)}>
+              <Icon
+                name="dots-three-vertical"
+                size={24}
+                style={styles.pages__contextIcon}
+              />
+            </TouchableOpacity>
           </TouchableOpacity>
         </>
       );
@@ -64,6 +170,14 @@ const Pages = ({pages, navigation}) => {
         data={pages}
         keyExtractor={item => item[0]}
         renderItem={renderPage}
+      />
+
+      <PageActionMenu
+        isActive={actionMenuShown}
+        activeId={currentActionMenuId}
+        setPages={setPages}
+        pages={pages}
+        deactivate={deactivateActionMenu}
       />
     </View>
   );
@@ -95,6 +209,7 @@ const styles = StyleSheet.create({
     padding: 8,
     marginVertical: 4,
     marginHorizontal: 12,
+    position: 'relative',
   },
 
   pages__itemTitle: {
@@ -116,14 +231,63 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 6,
     paddingTop: 2,
-    // borderTopWidth: 1,
-    // borderTopColor: global.colors.neutral[400],
-    // borderStyle: 'dashed',
   },
 
   pages__itemStat: {
     color: global.colors.neutral[500],
     fontSize: 12,
+  },
+
+  pages__actionOverlay: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    left: 0,
+    backgroundColor: 'black',
+    height: Dimensions.get('screen').height,
+    transform: [{translateY: -50}],
+  },
+
+  pages__actionOverlayClick: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+  },
+
+  pages__contextBtn: {
+    position: 'absolute',
+    right: 0,
+    top: '50%',
+    transform: [{translateY: -16}],
+    padding: 8,
+  },
+
+  pages__contextIcon: {
+    color: global.colors.neutral[800],
+  },
+
+  pages__actionMenu: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2,
+    backgroundColor: global.colors.neutral[200],
+    display: 'flex',
+    elevation: 5,
+    paddingTop: 16,
+    paddingBottom: 32,
+    maxHeight: Dimensions.get('screen').height / 2,
+    overflow: 'scroll',
+  },
+
+  pages__actionItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    display: 'flex',
+    flexDirection: 'row',
   },
 });
 

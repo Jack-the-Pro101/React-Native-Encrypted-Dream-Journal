@@ -29,7 +29,7 @@ const Home = ({navigation, styles}) => {
     <SafeAreaView style={styles.root}>
       <Header />
 
-      <Pages pages={pages} navigation={navigation} />
+      <Pages pages={pages} setPages={setPages} navigation={navigation} />
 
       <Navbar navigation={navigation} />
     </SafeAreaView>

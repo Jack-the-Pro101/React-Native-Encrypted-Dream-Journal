@@ -20,7 +20,7 @@ const Navbar = ({navigation}) => {
         accessibilityLabel="New page"
         activeOpacity={0.7}
         style={styles.navbar__addBtn}
-        onPressOut={() => navigation.navigate('Editor')}>
+        onPress={() => navigation.navigate('Editor')}>
         <Icon name="plus" size={36} style={styles.navbar__addBtnIcon} />
       </TouchableOpacity>
 
@@ -55,10 +55,10 @@ const styles = StyleSheet.create({
     left: Dimensions.get('window').width / 2,
     zIndex: 2,
     backgroundColor: global.colors.primary[500],
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    transform: [{translateY: -21}, {translateX: -21}],
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    transform: [{translateY: -24}, {translateX: -24}],
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

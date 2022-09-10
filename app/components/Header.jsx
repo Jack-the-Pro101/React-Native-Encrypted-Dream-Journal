@@ -34,6 +34,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
+    position: 'relative',
+    zIndex: 5,
     backgroundColor: Global.colors.neutral[200],
     display: 'flex',
     flexDirection: 'row',

@@ -13,27 +13,27 @@ const EditorNavbar = ({navigation, save}) => {
     <View style={styles.navbar}>
       <TouchableOpacity
         accessibilityLabel="Navigate back to home"
-        onPressOut={() => back()}
+        onPress={() => back()}
         style={styles.navbar__backBtn}>
-        <Icon name="arrow-back-ios" size={20} />
+        <Icon name="arrow-back-ios" size={24} />
       </TouchableOpacity>
 
       <View style={styles.navbar__actionBtns}>
         <TouchableOpacity
           accessibilityLabel="Undo"
           style={styles.navbar__backBtn}>
-          <Icon name="undo" size={24} />
+          <Icon name="undo" size={28} />
         </TouchableOpacity>
         <TouchableOpacity
           accessibilityLabel="Redo"
           style={styles.navbar__backBtn}>
-          <Icon name="redo" size={24} />
+          <Icon name="redo" size={28} />
         </TouchableOpacity>
         <TouchableOpacity
           accessibilityLabel="Redo"
           style={styles.navbar__backBtn}
           onPress={save}>
-          <Icon name="check" size={24} />
+          <Icon name="check" size={28} />
         </TouchableOpacity>
       </View>
     </View>
@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 24,
-    paddingHorizontal: 16,
-    elevation: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 2,
     backgroundColor: global.colors.neutral[200],
   },
 
   navbar__backBtn: {
     color: global.colors.neutral[900],
+    padding: 16,
   },
 
   navbar__actionBtns: {

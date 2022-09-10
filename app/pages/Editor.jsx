@@ -44,8 +44,10 @@ const Editor = ({navigation, styles, route}) => {
   const savePage = async () => {
     const wordCount = text.split(/ /g).length;
 
+    id = id ?? uuid();
+
     await AsyncStorage.setItem(
-      id ?? uuid(),
+      id,
       JSON.stringify({
         title,
         text,
